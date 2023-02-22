@@ -4,7 +4,6 @@ import { useTimer } from 'react-timer-hook';
 export default function Timer({ duration }) {
 
     const expiryTimestamp = new Date();
-    //expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + duration);
     const autoStart = false;
 
     const {
