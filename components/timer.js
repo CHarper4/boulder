@@ -3,9 +3,9 @@ import { useTimer } from 'react-timer-hook';
 
 export default function Timer({ duration }) {
 
-    const expiryTimestamp = new Date();
-    const autoStart = false;
+    const [onBreak, setOnBreak] = useState(true);
 
+    const expiryTimestamp = new Date();
     const {
         seconds,
         minutes,
@@ -16,14 +16,30 @@ export default function Timer({ duration }) {
         pause,
         resume,
         restart,
-    } = useTimer({ expiryTimestamp, autoStart, onExpire: () => timerReset() });
+    } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => timerReset() });
 
 
     const timerReset = () => {
         const time = new Date();
-        time.setSeconds(time.getSeconds() + duration);
         const autoStart = false;
+        
+        time.setSeconds(time.getSeconds() + duration);
         restart(time, autoStart);
+
+        
+        //setOnBreak(!onBreak);
+
+        /*
+        if(onBreak) {
+            //start break timer
+            time.setSeconds(time.getSeconds() + 600);
+            restart(time, autoStart);
+        } else {
+            //start work timer
+            time.setSeconds(time.getSeconds() + duration);
+            restart(time, autoStart);
+        }
+        */
     };
 
     useEffect(() => {
