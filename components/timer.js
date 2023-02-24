@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
+ import { incrementCompleted } from '@/lib/firebase';
+ import { UserContext } from '@/lib/context';
+
+
+import { useState, useEffect, useContext } from 'react';
 import { useTimer } from 'react-timer-hook';
 
-export default function Timer({ duration }) {
+export default function Timer({ duration, inPomoSession }) {
+
+    const { user, username } = useContext(UserContext);
 
     const [onBreak, setOnBreak] = useState(true);
 
@@ -16,34 +22,31 @@ export default function Timer({ duration }) {
         pause,
         resume,
         restart,
-    } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => timerReset() });
+    } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => resetAfterExpire() });
 
 
-    const timerReset = () => {
+    const resetAfterExpire = () => {
+
+        //only increment completed stat if the expired timer was for a pomo session
+        if(inPomoSession && user) {
+            incrementCompleted();
+        }
+
         const time = new Date();
         const autoStart = false;
-        
         time.setSeconds(time.getSeconds() + duration);
         restart(time, autoStart);
-
-        
-        //setOnBreak(!onBreak);
-
-        /*
-        if(onBreak) {
-            //start break timer
-            time.setSeconds(time.getSeconds() + 600);
-            restart(time, autoStart);
-        } else {
-            //start work timer
-            time.setSeconds(time.getSeconds() + duration);
-            restart(time, autoStart);
-        }
-        */
     };
 
+    const refreshTimer = () => {
+        const time = new Date();
+        const autoStart = false;
+        time.setSeconds(time.getSeconds() + duration);
+        restart(time, autoStart);
+    }
+
     useEffect(() => {
-        timerReset();
+        refreshTimer();
     }, [duration])
 
     return (
@@ -56,7 +59,7 @@ export default function Timer({ duration }) {
                 <button onClick={() => start()}>Start</button>
             }
             
-            <button onClick={() => timerReset()}>Reset</button>
+            <button onClick={() => resetAfterExpire()}>FF</button>
         </>
     );
 };
