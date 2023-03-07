@@ -27,6 +27,7 @@ export default function Login() {
                 :
                 <button onClick={signInWithGoogle}>Sign In with Google</button>
             }
+            <h3>{username}</h3>
         </>
     )
 }
@@ -93,7 +94,7 @@ function UsernameForm() {
                 <section>
                     <form onSubmit={onSubmit}>
                         <input name="username" placeholder="username" value={formValue} onChange={onChange} />
-                        <button type="submit" diasbled={!isValid}>Lock In</button>
+                        <button type="submit" diasbled={!isValid}>Save</button>
                     </form>
                 </section>    
             }
