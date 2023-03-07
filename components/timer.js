@@ -2,13 +2,13 @@
 
 import { useContext } from 'react';
 
-export default function Timer(showHours) {
+export default function Timer() {
 
     const { seconds, minutes, hours, isRunning, pause, resume } = useContext(TimerContext);
 
     return (
         <>
-            <h1>{showHours ? (`${hours} : `) : null} {minutes} : {seconds<10 ? 0 : null}{seconds}</h1>
+            <h1>{hours ? (`${hours} : `) : null} {minutes} : {seconds<10 ? 0 : null}{seconds}</h1>
 
             {isRunning ?
                 <button onClick={() => pause()}>Pause</button>

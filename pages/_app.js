@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { useTimer } from "react-timer-hook";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Navbar from '@/components/navbar';
 import { TimerContext, UserContext } from "@/lib/context";
@@ -24,25 +24,39 @@ export default function App({ Component, pageProps }) {
         pause,
         resume,
         restart,
-    } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => resetAfterExpire() });
+    } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => onExpire() });
     const [inPomoSession, setInPomoSession] = useState(false);
+    const [inProgress, setInProgress] = useState(false);
+    const [duration, setDuration] = useState(0);
+
+    //all timer data to be used as context
+    const timerData = {seconds, minutes, hours, days, duration, isRunning, inProgress, inPomoSession, setInProgress, setInPomoSession, setDuration, start, pause, resume, restart}
     
-    //timer reset and increment completed stat for finished pomo sessions
-    const resetAfterExpire = () => {
+    const onExpire = () => {
+      //increment completed stat for finished pomo sessions
       if(inPomoSession && userData.user) {
         incrementCompleted();
       }
+      //reset statuses
+      setInPomoSession(false);
+      setInProgress(false);
+    }
 
+    const refreshTimer = () => {
       const time = new Date();
       const autoStart = false;
       time.setSeconds(time.getSeconds() + duration);
       restart(time, autoStart);
     }
 
+    useEffect(() => {
+      refreshTimer();
+    }, [duration])
+
 
 
   return (
-    <TimerContext.Provider value={{seconds, minutes, hours, days, isRunning, inPomoSession, setInPomoSession, start, pause, resume, restart}}>
+    <TimerContext.Provider value={timerData}>
     <UserContext.Provider value={userData}>
       <Navbar />
       <Component {...pageProps} />
