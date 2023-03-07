@@ -32,7 +32,6 @@ export default function Login() {
     )
 }
 
-
 function UsernameForm() {
 
     const { user, username } = useContext(UserContext);
@@ -81,7 +80,6 @@ function UsernameForm() {
             if(username.length >= 3) {
                 const ref = firestore.collection('usernames').doc(`${username}`);
                 const { exists } = await ref.get();
-                console.log('firestore checked')
                 setIsValid(!exists);
             }
         }, 500),
@@ -96,7 +94,7 @@ function UsernameForm() {
                         <input name="username" placeholder="username" value={formValue} onChange={onChange} />
                         <button type="submit" diasbled={!isValid}>Save</button>
                     </form>
-                </section>    
+                </section>
             }
         </>
     )

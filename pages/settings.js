@@ -40,11 +40,11 @@ export default function Settings() {
     return (
         <>
             <form onSubmit={onSubmit}>
-                <label for="pomoMins">Pomodoro Length: </label>
+                <label for="pomoMins">Study Session Length: </label>
                 <input type="number" name="pomoMins" value={pomoMins} onChange={onChange}></input><br/><br/>
                 <label for="breakMins">Break Length: </label>
                 <input type="number" name="breakMins" value={breakMins} onChange={onChange}></input>
-                <p>**lengths are in minutes**</p>
+                <p>**in minutes**</p>
 
                 <button type="submit">Save Changes</button>
             </form>

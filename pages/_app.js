@@ -31,7 +31,23 @@ export default function App({ Component, pageProps }) {
     const [duration, setDuration] = useState(0);
 
     //all timer data to be used as context
-    const timerData = {seconds, minutes, hours, days, duration, isRunning, inProgress, inPomoSession, setInProgress, setInPomoSession, setDuration, start, pause, resume, restart}
+    const timerData = {
+      seconds, 
+      minutes, 
+      hours, 
+      days, 
+      duration, 
+      isRunning, 
+      inProgress, 
+      inPomoSession, 
+      setInProgress, 
+      setInPomoSession, 
+      setDuration, 
+      start, 
+      pause, 
+      resume, 
+      restart,
+    }
     
     const onExpire = () => {
       //increment completed stat for finished pomo sessions
@@ -55,8 +71,7 @@ export default function App({ Component, pageProps }) {
       refreshTimer();
     }, [duration])
 
-
-
+    
   return (
     <TimerContext.Provider value={timerData}>
     <UserContext.Provider value={userData}>

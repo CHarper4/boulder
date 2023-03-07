@@ -1,6 +1,11 @@
+import { UserContext } from '@/lib/context'
+
+import { useContext } from 'react';
 import Link from 'next/link'
 
 export default function Navbar() {
+
+    const { user } = useContext(UserContext);
 
     return (
         <nav className='navbar'>
@@ -10,9 +15,9 @@ export default function Navbar() {
                         <button>Index</button>
                     </Link>
                 </li>
-                <li>
+                <li className='profile-btn'>
                     <Link href="/login">
-                        <button>Login</button>
+                        <button>{user ? 'Profile' : 'Login'}</button>
                     </Link>
                 </li>
                 <li>
