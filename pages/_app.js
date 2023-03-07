@@ -25,6 +25,7 @@ export default function App({ Component, pageProps }) {
         resume,
         restart,
     } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => onExpire() });
+    
     const [inPomoSession, setInPomoSession] = useState(false);
     const [inProgress, setInProgress] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -40,6 +41,7 @@ export default function App({ Component, pageProps }) {
       //reset statuses
       setInPomoSession(false);
       setInProgress(false);
+      setDuration(0);
     }
 
     const refreshTimer = () => {
