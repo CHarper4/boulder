@@ -3,6 +3,7 @@ import { auth, googleAuthProvider, firestore, getTodayRef } from "../lib/firebas
 
 import { useContext, useState, useEffect, useCallback } from "react";
 import debounce from 'lodash.debounce';
+import { Center, Button, Affix, rem } from "@mantine/core";
 
 
 export default function Login() {
@@ -22,12 +23,20 @@ export default function Login() {
 
     return (
         <>
+        <Center>
             {user ? 
-                username ? <button onClick={() => auth.signOut()}>Sign Out</button> : <UsernameForm />
-                :
-                <button onClick={signInWithGoogle}>Sign In with Google</button>
+                username ? 
+                        <Affix position={{ bottom: rem(20), right: rem('46.5%') }}>
+                            <Button color="gray" onClick={() => auth.signOut()}>Sign Out</Button> 
+                        </Affix>   
+                        : 
+                        <UsernameForm />
+                    
+                    :
+                    <Button color="light gray" onClick={signInWithGoogle}>Sign In with Google</Button>
             }
             <h3>{username}</h3>
+        </Center>    
         </>
     )
 }

@@ -3,6 +3,8 @@ import { UserContext } from "@/lib/context";
 import { useContext, useState } from 'react';
 import { firestore } from "@/lib/firebase";
 
+import { Center, NumberInput, Button, Flex, Box } from "@mantine/core";
+
 
 export default function Settings() {
 
@@ -11,21 +13,10 @@ export default function Settings() {
     const [pomoMins, setPomoMins] = useState(pomoSeconds/60);
     const [breakMins, setBreakMins] = useState(breakSeconds/60); 
 
-    const onChange = (e) => {
-        const value = e.target.value;
+    //TODO: input validation
 
-        //TODO: input validation
-
-        if(e.target.name == "pomoMins") {
-            setPomoMins(value);
-        } else {
-            setBreakMins(value);
-        }
-    }
-
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        
+    const onSubmit = async () => {
+            
         if(user) {
             //update authenticated user's settings in firestore
             const res = await firestore.doc(`users/${user.uid}`)
@@ -39,15 +30,33 @@ export default function Settings() {
 
     return (
         <>
-            <form onSubmit={onSubmit}>
-                <label for="pomoMins">Study Session Length: </label>
-                <input type="number" name="pomoMins" value={pomoMins} onChange={onChange}></input><br/><br/>
-                <label for="breakMins">Break Length: </label>
-                <input type="number" name="breakMins" value={breakMins} onChange={onChange}></input>
-                <p>**in minutes**</p>
-
-                <button type="submit">Save Changes</button>
-            </form>
+            <Flex
+                justify="center"
+                align="center"
+                direction="column"
+            >
+                <Box w={200}
+                    sx={() => ({
+                        padding: "5px"
+                    })}
+                >
+                    <NumberInput label="Study Session Length" onChange={(val) => setPomoMins(val)} defaultValue={pomoMins} step={5} min={0}/>
+                </Box>    
+                <Box w={200}
+                    sx={() => ({
+                        padding: "5px"
+                    })}
+                >
+                    <NumberInput label="Break Length" onChange={(val) => setBreakMins(val)} defaultValue={breakMins} step={1} min={0}/>
+                </Box>
+                <Box w={150} 
+                    sx={() => ({
+                        padding: "10px"
+                    })}
+                >
+                    <Button onClick={() => onSubmit()} variant="filled" color="teal">Save Changes</Button>
+                </Box>
+            </Flex>
         </>
     );
 }

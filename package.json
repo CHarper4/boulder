@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/core": "^6.0.1",
+    "@mantine/hooks": "^6.0.1",
     "@next/font": "13.1.6",
     "firebase": "^9.17.1",
     "lodash.debounce": "^4.0.8",
@@ -16,6 +18,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
-    "react-timer-hook": "^3.0.5"
+    "react-timer-hook": "^3.0.5",
+    "tabler-icons-react": "^1.56.0"
   }
 }

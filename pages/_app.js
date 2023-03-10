@@ -6,6 +6,7 @@ import Navbar from '@/components/navbar';
 import { TimerContext, UserContext } from "@/lib/context";
 import { useUserData } from "@/lib/hooks";
 import { incrementCompleted } from "@/lib/firebase";
+import { MantineProvider } from "@mantine/core";
 
 
 export default function App({ Component, pageProps }) {
@@ -73,11 +74,13 @@ export default function App({ Component, pageProps }) {
 
     
   return (
+    <MantineProvider withGlobalStyles withNormalizeCSS>
     <TimerContext.Provider value={timerData}>
     <UserContext.Provider value={userData}>
       <Navbar />
       <Component {...pageProps} />
     </UserContext.Provider>
     </TimerContext.Provider>
+    </MantineProvider>
   )
 }

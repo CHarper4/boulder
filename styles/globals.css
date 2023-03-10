@@ -1,19 +1,19 @@
 .navbar {
     height: 70px;
     width: 100%;
+    padding: 10px;
 }
 
 ul.nav-ul {
     list-style-type: none;
-    justify-content: center;
+    position: relative;
+    right: 100px;
 }
 
 li {
-    float: left;
+    float: right;
+    margin: 5px;
 }
 
-.profile-btn {
-    float: right;
-}
 
 

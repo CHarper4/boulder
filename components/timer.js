@@ -1,6 +1,7 @@
  import { TimerContext } from '@/lib/context';
 
 import { useContext } from 'react';
+import { Center, Button, Flex, Box } from '@mantine/core';
 
 export default function Timer() {
 
@@ -8,13 +9,21 @@ export default function Timer() {
 
     return (
         <>
+        <Center>
             <h1>{hours ? (`${hours} : `) : null} {minutes} : {seconds<10 ? 0 : null}{seconds}</h1>
-
-            {isRunning ?
-                <button onClick={() => pause()}>Pause</button>
-                :
-                <button onClick={() => resume()}>Resume</button>
-            }
+        </Center>
+        <Center>
+            <Flex>
+                <Box w={100}>
+                    {isRunning ?
+                        <Button fullWidth variant="subtle" onClick={() => pause()}>Pause</Button>
+                        :
+                        <Button fullWidth variant="gradient" gradient={{from: 'teal', to: 'lime'}} onClick={() => resume()}>Resume</Button>
+                    }
+                </Box>
+            </Flex>
+            
+        </Center>
         </>
     );
 };
