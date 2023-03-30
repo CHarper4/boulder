@@ -1,11 +1,13 @@
  import { TimerContext } from '@/lib/context';
 
 import { useContext } from 'react';
-import { Center, Button, Flex, Box } from '@mantine/core';
+import { Center, Button, Flex, Box, Popover, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
 export default function Timer() {
 
-    const { seconds, minutes, hours, isRunning, pause, resume } = useContext(TimerContext);
+    const { seconds, minutes, hours, isRunning, pause, resume, setInProgress, refreshTimer } = useContext(TimerContext);
+    const [opened, { close, open }] = useDisclosure(false);
 
     return (
         <>
@@ -22,7 +24,20 @@ export default function Timer() {
                     }
                 </Box>
             </Flex>
-            
+        </Center>
+        <Center h={100}>
+            <Flex>
+                <Box w={75}>
+                    <Popover width={200} position="bottom" withArrow shadow="md" opened={opened}>
+                        <Popover.Target>
+                            <Button onMouseEnter={open} onMouseLeave={close} fullWidth variant="subtle" color="red" size="xs" onClick={() => {refreshTimer(); setInProgress(false)}}>Reset</Button>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                            <Text size="xs">Resetting will not save the progress from this session</Text>
+                        </Popover.Dropdown>
+                    </Popover>
+                </Box>
+            </Flex>
         </Center>
         </>
     );
