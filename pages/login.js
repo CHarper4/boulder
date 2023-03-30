@@ -3,8 +3,9 @@ import { auth, googleAuthProvider, getTodayRef, getWeekData } from "../lib/fireb
 import { BarChart } from "@/components/bar_chart";
 import { UsernameForm } from "@/components/username_form";
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Center, Button, Affix, Flex, Box, rem } from "@mantine/core";
+import { getTodayDate } from "@/lib/hooks";
 
 
 export default function Login() {
@@ -25,22 +26,25 @@ export default function Login() {
 
         //create day's document on sign-in
         const todayRef = getTodayRef();
-        const exists = await todayRef.get();
-        if(!exists) {
-            console.log('setting doc')
-            todayRef.set({
-                completed: 0, 
-                description: "",
-            })
-            .catch((e) => {
-                console.error("error creating day doc: ", e);
+        todayRef.get()
+            .then(docSnapshot => {
+                if(!docSnapshot.exists) {
+                    const date = getTodayDate();
+                    todayRef.set({
+                        completed: 0, 
+                        description: "",
+                        date: date
+                    }).catch(e => console.error('error creating day doc ', e));
+                } else {
+                    console.log('todayDoc exists')
+                }
             });
-        }
+
+        retrieveWeekData();
     }
 
     //populate graph with user's data
     const retrieveWeekData = async () => {
-
         let weekData = await getWeekData();
 
         let dateLabels = [];
@@ -60,9 +64,11 @@ export default function Login() {
                 backgroundColor: ["#099268"],
             }],
         });
-
     }
 
+    useEffect(() => {
+        retrieveWeekData();
+    }, []);
 
     return (
         <>
@@ -72,7 +78,6 @@ export default function Login() {
                 username ? 
                         <Affix position={{ bottom: rem(20), right: rem('46.5%') }}>
                             <Button color="gray" onClick={() => auth.signOut()}>Sign Out</Button>
-                            <Button onClick={() => retrieveWeekData()}>get week data</Button>
                         </Affix>
                         : 
                         <UsernameForm />
@@ -81,15 +86,7 @@ export default function Login() {
             }
         </Center>
         <Center>
-        {(user && username) ? 
-            <Flex>
-                <Box w={800}>
-                    <BarChart dataSet={graphData} />
-                </Box>
-            </Flex>
-            :
-            <p>log in to see stats</p>
-        }
+            <BarChart dataSet={graphData} />
         </Center>
         </>
     )

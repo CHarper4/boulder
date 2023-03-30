@@ -8,7 +8,7 @@ import { Button, Center, Flex, Box } from "@mantine/core";
 export default function Home() {
 
   const { pomoSeconds, breakSeconds } = useContext(UserContext);
-  const { seconds, minutes, hours, duration, isRunning, start, pause, resume, restart, inProgress, setInProgress, setInPomoSession, setDuration } = useContext(TimerContext);
+  const { seconds, minutes, hours, duration, start, inProgress, setInProgress, setInPomoSession, setDuration } = useContext(TimerContext);
 
 
   return (
