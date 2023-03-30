@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Navbar from '@/components/navbar';
 import { TimerContext, UserContext } from "@/lib/context";
 import { useUserData } from "@/lib/hooks";
-import { incrementCompleted } from "@/lib/firebase";
+import { auth, incrementCompleted } from "@/lib/firebase";
 import { MantineProvider } from "@mantine/core";
 
 
@@ -70,7 +70,8 @@ export default function App({ Component, pageProps }) {
 
     useEffect(() => {
       refreshTimer();
-    }, [duration])
+    }, [duration]);
+
 
     
   return (

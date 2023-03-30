@@ -12,10 +12,13 @@ export default function Settings() {
 
     const [pomoMins, setPomoMins] = useState(pomoSeconds/60);
     const [breakMins, setBreakMins] = useState(breakSeconds/60); 
+    const [dirty, setDirty] = useState(false);
 
     //TODO: input validation
 
     const onSubmit = async () => {
+
+        setDirty(false);
             
         if(user) {
             //update authenticated user's settings in firestore
@@ -40,21 +43,21 @@ export default function Settings() {
                         padding: "5px"
                     })}
                 >
-                    <NumberInput label="Study Session Length" onChange={(val) => setPomoMins(val)} defaultValue={pomoMins} step={5} min={0}/>
+                    <NumberInput label="Study Session Length" onChange={(val) => {setPomoMins(val); setDirty(true);}} defaultValue={pomoMins} step={5} min={0}/>
                 </Box>    
                 <Box w={200}
                     sx={() => ({
                         padding: "5px"
                     })}
                 >
-                    <NumberInput label="Break Length" onChange={(val) => setBreakMins(val)} defaultValue={breakMins} step={1} min={0}/>
+                    <NumberInput label="Break Length" onChange={(val) => {setBreakMins(val); setDirty(true);}} defaultValue={breakMins} step={1} min={0}/>
                 </Box>
                 <Box w={150} 
                     sx={() => ({
                         padding: "10px"
                     })}
                 >
-                    <Button onClick={() => onSubmit()} variant="filled" color="teal">Save Changes</Button>
+                    <Button onClick={() => onSubmit()} variant="filled" color="teal" disabled={!dirty}>Save Changes</Button>
                 </Box>
             </Flex>
         </>
