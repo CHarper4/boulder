@@ -18,14 +18,14 @@ export default function Home() {
         :
         <>
           <Center>
-          <Button.Group>
-            <Button variant="outline" onClick={() => {setDuration(pomoSeconds); setInPomoSession(true)}}>Study</Button>
-            <Button variant="outline" onClick={() => {setDuration(breakSeconds); setInPomoSession(false)}}>Break</Button>
-          </Button.Group>
+            <Button.Group>
+              <Button variant="light" onClick={() => {setDuration(pomoSeconds); setInPomoSession(true)}}>Study</Button>
+              <Button variant="light" onClick={() => {setDuration(breakSeconds); setInPomoSession(false)}}>Break</Button>
+            </Button.Group>
           </Center>
 
           <Center>
-          <h1>{hours ? (`${hours} : `) : null} {minutes} : {seconds<10 ? 0 : null}{seconds}</h1>
+            <h1>{hours ? (`${hours} : `) : null} {minutes} : {seconds<10 ? 0 : null}{seconds}</h1>
           </Center>
             
           <Center>
@@ -42,7 +42,6 @@ export default function Home() {
                 </Button>
               </Box>
             </Flex>
-          
           </Center>
         </>
       }

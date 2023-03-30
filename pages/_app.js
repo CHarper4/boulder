@@ -13,6 +13,10 @@ export default function App({ Component, pageProps }) {
 
   const userData = useUserData();
 
+  const [inPomoSession, setInPomoSession] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
+  const [duration, setDuration] = useState(0);
+
   //timer used to populate TimerContext
   const expiryTimestamp = new Date();
     const {
@@ -26,29 +30,6 @@ export default function App({ Component, pageProps }) {
         resume,
         restart,
     } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => onExpire() });
-    
-    const [inPomoSession, setInPomoSession] = useState(false);
-    const [inProgress, setInProgress] = useState(false);
-    const [duration, setDuration] = useState(0);
-
-    //all timer data to be used as context
-    const timerData = {
-      seconds, 
-      minutes, 
-      hours, 
-      days, 
-      duration, 
-      isRunning, 
-      inProgress, 
-      inPomoSession, 
-      setInProgress, 
-      setInPomoSession, 
-      setDuration, 
-      start, 
-      pause, 
-      resume, 
-      restart,
-    }
     
     const onExpire = () => {
       //increment completed stat for finished pomo sessions
@@ -73,9 +54,29 @@ export default function App({ Component, pageProps }) {
     }, [duration]);
 
 
+    //all timer data to be used as context
+    const timerData = {
+      seconds, 
+      minutes, 
+      hours, 
+      days, 
+      duration, 
+      isRunning, 
+      inProgress, 
+      inPomoSession, 
+      setInProgress, 
+      setInPomoSession, 
+      setDuration, 
+      start, 
+      pause, 
+      resume, 
+      restart,
+      refreshTimer,
+    }
     
+
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
     <TimerContext.Provider value={timerData}>
     <UserContext.Provider value={userData}>
       <Navbar />
