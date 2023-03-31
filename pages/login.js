@@ -1,5 +1,5 @@
 import { UserContext } from "@/lib/context";
-import { auth, googleAuthProvider, getTodayRef, getWeekData } from "../lib/firebase";
+import { auth, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
 import { BarChart } from "@/components/bar_chart";
 import { UsernameForm } from "@/components/username_form";
 
@@ -11,7 +11,7 @@ import { getTodayDate } from "@/lib/hooks";
 export default function Login() {
 
     const { user, username } = useContext(UserContext);
-
+    const [graphAmount, setGraphAmount] = useState(7);
     const [graphData, setGraphData] = useState({
         labels: [],
         datasets: [{
@@ -35,8 +35,6 @@ export default function Login() {
                         description: "",
                         date: date
                     }).catch(e => console.error('error creating day doc ', e));
-                } else {
-                    console.log('todayDoc exists')
                 }
             });
 
@@ -45,7 +43,7 @@ export default function Login() {
 
     //populate graph with user's data
     const retrieveWeekData = async () => {
-        let weekData = await getWeekData();
+        let weekData = await getSessionData(graphAmount);
 
         let dateLabels = [];
         let dateValues = [];
@@ -67,8 +65,17 @@ export default function Login() {
     }
 
     useEffect(() => {
-        retrieveWeekData();
-    }, []);
+        if(user) {
+            retrieveWeekData();
+        }
+    }, [graphAmount]);
+
+    const testFunc = () => {
+        let dateObj = new Date();
+        dateObj.setDate(dateObj.getDate()-32);
+        let d = (dateObj.getMonth()+1) + '-' + dateObj.getDate() + '-' + dateObj.getFullYear();
+        console.log('d: ' + d);
+    }
 
     return (
         <>
@@ -78,6 +85,7 @@ export default function Login() {
                 username ? 
                         <Affix position={{ bottom: rem(20), right: rem('46.5%') }}>
                             <Button color="gray" onClick={() => auth.signOut()}>Sign Out</Button>
+                            <Button onClick={() => testFunc()}>testFunc</Button>
                         </Affix>
                         : 
                         <UsernameForm />
@@ -85,6 +93,14 @@ export default function Login() {
                     <Button color="light gray" onClick={signInWithGoogle}>Sign In with Google</Button>
             }
         </Center>
+        
+        <Flex maw={1070} justify="flex-end">
+            <Button.Group>
+                <Button variant="outline"  color="teal" size="xs" radius="xs" onClick={() => setGraphAmount(7)}>Week</Button>
+                <Button variant="outline" color="teal" size="xs" radius="xs" onClick={() => setGraphAmount(31)}>Month</Button>
+            </Button.Group>
+        </Flex>
+        
         <Center>
             <BarChart dataSet={graphData} />
         </Center>
