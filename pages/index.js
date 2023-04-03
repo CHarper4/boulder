@@ -19,8 +19,8 @@ export default function Home() {
         <>
           <Center>
             <Button.Group>
-              <Button variant="light" onClick={() => {setDuration(pomoSeconds); setInPomoSession(true)}}>Study</Button>
-              <Button variant="light" onClick={() => {setDuration(breakSeconds); setInPomoSession(false)}}>Break</Button>
+              <Button variant="light" color="teal" onClick={() => {setDuration(pomoSeconds); setInPomoSession(true)}}>Study</Button>
+              <Button variant="light" color="teal" onClick={() => {setDuration(breakSeconds); setInPomoSession(false)}}>Break</Button>
             </Button.Group>
           </Center>
 

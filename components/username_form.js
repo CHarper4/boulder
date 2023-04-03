@@ -1,8 +1,9 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
 import debounce from "lodash.debounce";
-import { firestore } from '@/lib/firebase';
+import { firestore, auth } from '@/lib/firebase';
 
 import { UserContext } from '@/lib/context';
+import { TextInput, Button, Flex, Box } from '@mantine/core';
 
 export function UsernameForm() {
 
@@ -17,23 +18,23 @@ export function UsernameForm() {
 
     //only accept valid input; reset username validity on change
     const onChange = (e) => {
-        const value = e.target.value.toLowerCase();
+        const originalValue = e.target.value
+        const value = originalValue.toLowerCase();
         const regex = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
         if(value.length < 3) {
-            setFormValue(value);
+            setFormValue(originalValue);
             setIsValid(false);
         }
 
         if(regex.test(value)) {
-            setFormValue(value);
+            setFormValue(originalValue);
             setIsValid(false);
         }
     }
 
     //update firestore with user's new username
     const onSubmit = async (e) => {
-        e.preventDefault();
 
         //batch write with new user and username docs
         const userDoc = firestore.doc(`users/${user.uid}`);
@@ -61,12 +62,23 @@ export function UsernameForm() {
     return (
         <>
             {!username && 
-                <section>
-                    <form onSubmit={onSubmit}>
-                        <input name="username" placeholder="username" value={formValue} onChange={onChange} />
-                        <button type="submit" disabled={!isValid}>Save</button>
-                    </form>
-                </section>
+            <>
+            <Flex direction={"column"} align={"center"} gap={"sm"}>
+                <Box>
+                    <TextInput
+                    placeholder="Create your username"
+                    value={formValue}   
+                    onChange={onChange}
+                    />
+                </Box>
+                <Box>
+                    <Button disabled={!isValid} onClick={() => onSubmit()} color="teal">Save Username</Button>
+                </Box>
+                <Box sx={{padding:"40px"}}>
+                    <Button variant="subtle" color="red" compact onClick={() => auth.signOut()}>cancel</Button>
+                </Box>
+            </Flex>
+            </>
             }
         </>
     )

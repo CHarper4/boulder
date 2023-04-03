@@ -1,25 +1,30 @@
 import { UserContext } from "@/lib/context";
-import { auth, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
+import { auth, firestore, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
 import { BarChart } from "@/components/bar_chart";
 import { UsernameForm } from "@/components/username_form";
 
 import { useContext, useState, useEffect } from "react";
-import { Center, Button, Affix, Flex, Box, rem } from "@mantine/core";
+import { Center, Button, Affix, Stack, rem } from "@mantine/core";
 import { getTodayDate } from "@/lib/hooks";
 
 
 export default function Login() {
 
     const { user, username } = useContext(UserContext);
+
     const [graphAmount, setGraphAmount] = useState(7);
     const [graphData, setGraphData] = useState({
         labels: [],
         datasets: [{
             label: "Sessions",
             data: [],
-            backgroundColor: ["#099268"],
+            backgroundColor: ["#12b886"], 
         }],
     });
+
+    const [weekBtnVariant, setWeekBtnVariant] = useState("filled");
+    const [monthBtnVariant, setMonthButtonVariant] = useState("outline");
+
 
     const signInWithGoogle = async () => {
         await auth.signInWithPopup(googleAuthProvider);
@@ -59,7 +64,7 @@ export default function Login() {
             datasets: [{
                 label: "Sessions",
                 data: dateValues,
-                backgroundColor: ["#099268"],
+                backgroundColor: ["#12b886"],
             }],
         });
     }
@@ -70,40 +75,56 @@ export default function Login() {
         }
     }, [graphAmount]);
 
-    const testFunc = () => {
-        let dateObj = new Date();
-        dateObj.setDate(dateObj.getDate()-32);
-        let d = (dateObj.getMonth()+1) + '-' + dateObj.getDate() + '-' + dateObj.getFullYear();
-        console.log('d: ' + d);
-    }
-
     return (
         <>
         <Center>
-            <h3>{username}</h3>
             {user ? 
                 username ? 
                         <Affix position={{ bottom: rem(20), right: rem('46.5%') }}>
                             <Button color="gray" onClick={() => auth.signOut()}>Sign Out</Button>
-                            <Button onClick={() => testFunc()}>testFunc</Button>
                         </Affix>
                         : 
                         <UsernameForm />
                     :
-                    <Button color="light gray" onClick={signInWithGoogle}>Sign In with Google</Button>
+                    <Button variant="filled" color="teal" onClick={signInWithGoogle}>Sign In with Google</Button>
             }
         </Center>
         
-        <Flex maw={1070} justify="flex-end">
-            <Button.Group>
-                <Button variant="outline"  color="teal" size="xs" radius="xs" onClick={() => setGraphAmount(7)}>Week</Button>
-                <Button variant="outline" color="teal" size="xs" radius="xs" onClick={() => setGraphAmount(31)}>Month</Button>
-            </Button.Group>
-        </Flex>
-        
-        <Center>
-            <BarChart dataSet={graphData} />
-        </Center>
+        {user && username ? 
+            <>
+            <Stack align="center" justify="center" spacing="xl">
+                <BarChart dataSet={graphData} />
+                <Button.Group>
+                    <Button 
+                        variant={weekBtnVariant} 
+                        color="teal" 
+                        size="xs" 
+                        radius="xs" 
+                        onClick={() => {
+                            setGraphAmount(7);
+                            setWeekBtnVariant("filled");
+                            setMonthButtonVariant("outline");
+                        }}
+                    >Week</Button>
+                    <Button 
+                        variant={monthBtnVariant} 
+                        color="teal" 
+                        size="xs" 
+                        radius="xs" 
+                        onClick={() => {
+                            setGraphAmount(31);
+                            setMonthButtonVariant("filled");
+                            setWeekBtnVariant("outline");
+                        }}
+                    >Month</Button>
+                </Button.Group>
+            </Stack>
+            </>
+            :
+            <Affix position={{ bottom: rem('50%'), right: rem('38.5%')}}>
+                <p>log in to record your sessions and see stats</p>
+            </Affix>
+        }
         </>
     )
 }
