@@ -7,7 +7,7 @@ import { useUserData } from "@/lib/hooks";
 
 export function BarChart({ dataSet }) {
 
-    const {user, username} = useUserData();
+    const { username } = useUserData();
 
     const options = {
         scales: {
@@ -23,6 +23,9 @@ export function BarChart({ dataSet }) {
                 }
             }
         },
+        animation: {
+            duration: 0
+        },
         plugins: {
             tooltip: {
                 enabled: false
@@ -33,7 +36,7 @@ export function BarChart({ dataSet }) {
             title: {
                 display: true,
                 text: (username + "'s history") || '',
-                align: "start",
+                align: "center",
                 fullSize: false,
                 font: {
                     size: 16

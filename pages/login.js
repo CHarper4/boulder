@@ -1,26 +1,27 @@
 import { UserContext } from "@/lib/context";
-import { auth, firestore, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
+import { auth, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
 import { BarChart } from "@/components/bar_chart";
 import { UsernameForm } from "@/components/username_form";
 
 import { useContext, useState, useEffect } from "react";
-import { Center, Button, Affix, Stack, rem } from "@mantine/core";
+import { Center, Button, Affix, Stack, LoadingOverlay, Box, rem, useMantineColorScheme } from "@mantine/core";
 import { getTodayDate } from "@/lib/hooks";
 
 
 export default function Login() {
 
     const { user, username } = useContext(UserContext);
+    const { colorScheme } = useMantineColorScheme();
 
     const [graphAmount, setGraphAmount] = useState(7);
     const [graphData, setGraphData] = useState({
         labels: [],
         datasets: [{
-            label: "Sessions",
             data: [],
             backgroundColor: ["#12b886"], 
         }],
     });
+    const [graphIsLoading, setGraphIsLoading] = useState(false);
 
     const [weekBtnVariant, setWeekBtnVariant] = useState("filled");
     const [monthBtnVariant, setMonthButtonVariant] = useState("outline");
@@ -48,6 +49,8 @@ export default function Login() {
 
     //populate graph with user's data
     const retrieveWeekData = async () => {
+        setGraphIsLoading(true);
+
         let weekData = await getSessionData(graphAmount);
 
         let dateLabels = [];
@@ -62,11 +65,12 @@ export default function Login() {
         setGraphData({
             labels: dateLabels,
             datasets: [{
-                label: "Sessions",
                 data: dateValues,
-                backgroundColor: ["#12b886"],
+                backgroundColor: ["#12b886"]
             }],
         });
+
+        setGraphIsLoading(false);
     }
 
     useEffect(() => {
@@ -86,14 +90,29 @@ export default function Login() {
                         : 
                         <UsernameForm />
                     :
-                    <Button variant="filled" color="teal" onClick={signInWithGoogle}>Sign In with Google</Button>
+                    <>
+                        <Button variant="filled" color="teal" onClick={signInWithGoogle}>Sign In with Google</Button>
+                        <Affix position={{ bottom: rem('50%'), right: rem('38.5%')}}>
+                            <p>log in to record your sessions and see stats</p>
+                        </Affix>
+                    </>
+                    
             }
         </Center>
         
-        {user && username ? 
+        {(user && username) && 
             <>
             <Stack align="center" justify="center" spacing="xl">
-                <BarChart dataSet={graphData} />
+                <Box pos="relative">
+                    <LoadingOverlay 
+                        visible={graphIsLoading} 
+                        loaderProps={{ color: 'teal', variant: 'bars' }} 
+                        overlayBlur={5} 
+                        overlayColor={colorScheme == 'dark' ? "#1a1b1e" : "#FFFFFF"}
+                        transitionDuration={500}
+                    />
+                    <BarChart dataSet={graphData} />
+                </Box>
                 <Button.Group>
                     <Button 
                         variant={weekBtnVariant} 
@@ -120,10 +139,6 @@ export default function Login() {
                 </Button.Group>
             </Stack>
             </>
-            :
-            <Affix position={{ bottom: rem('50%'), right: rem('38.5%')}}>
-                <p>log in to record your sessions and see stats</p>
-            </Affix>
         }
         </>
     )

@@ -9,11 +9,11 @@ export default function Navbar() {
 
     return (
         <nav className='navbar'>
-            <Group position="apart">
+            <Group position="apart" >
                 <ActionIcon variant="subtle" onClick={() => toggleColorScheme()}>
                     {isDark ? <Sun size="2rem"></Sun> : <Moon size="2rem" ></Moon>}
                 </ActionIcon>
-                <Group>
+                <Group spacing="xs">
                     <Link href="/">
                         <Button variant="subtle" color='teal'>Timer</Button>
                     </Link>
@@ -24,7 +24,6 @@ export default function Navbar() {
                         <ActionIcon variant="subtle"><Settings size="2rem"></Settings></ActionIcon>
                     </Link>
                 </Group>
-                
             </Group>
         </nav>
     )
