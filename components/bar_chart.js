@@ -35,7 +35,7 @@ export function BarChart({ dataSet }) {
             },
             title: {
                 display: true,
-                text: (username + "'s history") || '',
+                text: (username + "'s History") || '',
                 align: "center",
                 fullSize: false,
                 font: {

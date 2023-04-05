@@ -6,6 +6,7 @@ import { UsernameForm } from "@/components/username_form";
 import { useContext, useState, useEffect } from "react";
 import { Center, Button, Affix, Stack, LoadingOverlay, Box, rem, useMantineColorScheme } from "@mantine/core";
 import { getTodayDate } from "@/lib/hooks";
+import { BrandGoogle } from "tabler-icons-react";
 
 
 export default function Login() {
@@ -28,23 +29,30 @@ export default function Login() {
 
 
     const signInWithGoogle = async () => {
-        await auth.signInWithPopup(googleAuthProvider);
+        await auth.signInWithPopup(googleAuthProvider)
+            .catch(e => {
+                console.error("Error signing in: ", e); 
+                return
+            })
 
-        //create day's document on sign-in
-        const todayRef = getTodayRef();
-        todayRef.get()
-            .then(docSnapshot => {
-                if(!docSnapshot.exists) {
-                    const date = getTodayDate();
-                    todayRef.set({
-                        completed: 0, 
-                        description: "",
-                        date: date
-                    }).catch(e => console.error('error creating day doc ', e));
-                }
-            });
+            if(user) {
+                //create day's document on sign-in
+                const todayRef = getTodayRef();
+                todayRef.get()
+                    .then(docSnapshot => {
+                        if(!docSnapshot.exists) {
+                            const date = getTodayDate();
+                            todayRef.set({
+                                completed: 0, 
+                                description: "",
+                                date: date
+                            }).catch(e => console.error('error creating day doc ', e));
+                        }
+                    });
 
-        retrieveWeekData();
+                retrieveWeekData();
+            }
+
     }
 
     //populate graph with user's data
@@ -79,6 +87,8 @@ export default function Login() {
         }
     }, [graphAmount]);
 
+
+    //position={{ bottom: rem('50%'), right: rem('38.5%')}}
     return (
         <>
         <Center>
@@ -91,12 +101,16 @@ export default function Login() {
                         <UsernameForm />
                     :
                     <>
-                        <Button variant="filled" color="teal" onClick={signInWithGoogle}>Sign In with Google</Button>
-                        <Affix position={{ bottom: rem('50%'), right: rem('38.5%')}}>
-                            <p>log in to record your sessions and see stats</p>
-                        </Affix>
+                    <Stack align="center">
+                        <Button 
+                            variant="filled" 
+                            color="teal" 
+                            onClick={signInWithGoogle}
+                            leftIcon={<BrandGoogle size={20} strokeWidth={2.5} color={"white"}/>}
+                        >Sign In</Button>
+                        <p>log in to record your sessions and see stats</p>
+                    </Stack>
                     </>
-                    
             }
         </Center>
         
