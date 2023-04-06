@@ -29,29 +29,30 @@ export default function Login() {
 
 
     const signInWithGoogle = async () => {
+        let signedIn = true;
         await auth.signInWithPopup(googleAuthProvider)
             .catch(e => {
                 console.error("Error signing in: ", e); 
-                return
-            })
+                signedIn = false;
+            });
 
-            if(user) {
-                //create day's document on sign-in
-                const todayRef = getTodayRef();
-                todayRef.get()
-                    .then(docSnapshot => {
-                        if(!docSnapshot.exists) {
-                            const date = getTodayDate();
-                            todayRef.set({
-                                completed: 0, 
-                                description: "",
-                                date: date
-                            }).catch(e => console.error('error creating day doc ', e));
-                        }
-                    });
+        if(signedIn) {
+            //create day's document on sign-in
+            const todayRef = getTodayRef();
+            todayRef.get()
+                .then(docSnapshot => {
+                    if(!docSnapshot.exists) {
+                        const date = getTodayDate();
+                        todayRef.set({
+                            completed: 0, 
+                            description: "",
+                            date: date
+                        }).catch(e => console.error('error creating day doc ', e));
+                    }
+                });
 
-                retrieveWeekData();
-            }
+            retrieveWeekData();
+        }
 
     }
 
