@@ -3,7 +3,7 @@ import { UserContext } from "@/lib/context";
 import { useContext, useState } from 'react';
 import { firestore } from "@/lib/firebase";
 
-import { Center, NumberInput, Button, Flex, Box } from "@mantine/core";
+import { NumberInput, Button, Flex, Box } from "@mantine/core";
 
 
 export default function Settings() {
@@ -13,8 +13,6 @@ export default function Settings() {
     const [pomoMins, setPomoMins] = useState(pomoSeconds/60);
     const [breakMins, setBreakMins] = useState(breakSeconds/60); 
     const [dirty, setDirty] = useState(false);
-
-    //TODO: input validation
 
     const onSubmit = async () => {
 

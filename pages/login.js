@@ -47,7 +47,7 @@ export default function Login() {
                             completed: 0, 
                             description: "",
                             date: date
-                        }).catch(e => console.error('error creating day doc ', e));
+                        }).catch(e => console.error('Error creating day doc ', e));
                     }
                 });
 
@@ -89,7 +89,6 @@ export default function Login() {
     }, [graphAmount]);
 
 
-    //position={{ bottom: rem('50%'), right: rem('38.5%')}}
     return (
         <>
         <Center>

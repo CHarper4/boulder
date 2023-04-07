@@ -2,7 +2,7 @@ import Timer from "@/components/timer"
 import { TimerContext, UserContext } from "@/lib/context";
 
 import { useContext } from 'react'
-import { Button, Flex, Box, Stack, Card } from "@mantine/core";
+import { Button, Flex, Box, Stack } from "@mantine/core";
 
 
 export default function Home() {

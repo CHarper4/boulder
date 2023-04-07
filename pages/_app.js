@@ -16,7 +16,6 @@ export default function App({ Component, pageProps }) {
 
   //sign out on app close
   useEffect(() => {
-    console.log('sign out effect');
     return (() => auth.signOut());
   }, []);
   

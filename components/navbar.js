@@ -7,7 +7,7 @@ import { UserContext } from '@/lib/context';
 
 export default function Navbar() {
 
-    const { user, username } = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const isDark = colorScheme == "dark";
 
