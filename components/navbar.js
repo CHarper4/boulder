@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ActionIcon, Button, Group, Avatar, useMantineColorScheme } from '@mantine/core';
-import { Moon, Settings, Sun } from 'tabler-icons-react';
+import { Moon, Settings, Sun, Login } from 'tabler-icons-react';
 import { useContext } from 'react'
 
 import { UserContext } from '@/lib/context';
@@ -30,10 +30,10 @@ export default function Navbar() {
                         <Avatar 
                             src={user.photoURL} 
                             alt={username + "'s profile"} 
-                            radius="xl" size="md" sx={{marginLeft: "10px"}}
+                            radius="xl" size="md" sx={{marginRight: "10px", marginLeft: "10px"}}
                         />
                         : 
-                        <Button variant="subtle" color='teal'>Sign In</Button>
+                        <ActionIcon variant="subtle" sx={{marginRight: "10px", marginLeft: "10px"}}><Login size="2rem"></Login></ActionIcon>
                         }
                     </Link> 
                 </Group>
