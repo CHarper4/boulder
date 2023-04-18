@@ -1,20 +1,28 @@
-import { UserContext } from "@/lib/context";
+import { TimerContext, UserContext } from "@/lib/context";
 import { auth, googleAuthProvider, getTodayRef, getSessionData } from "../lib/firebase";
 import { BarChart } from "@/components/bar_chart";
 import { UsernameForm } from "@/components/username_form";
+import { createEPAccount, signInWithEP } from "@/lib/hooks";
 
 import { useContext, useState, useEffect } from "react";
-import { Center, Button, Affix, Stack, LoadingOverlay, Box, rem, useMantineColorScheme } from "@mantine/core";
+import { Center, Button, Affix, Stack, LoadingOverlay, Box, Card, TextInput, Divider, Modal, rem, useMantineColorScheme } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { getTodayDate } from "@/lib/hooks";
 import { BrandGoogle } from "tabler-icons-react";
 
 
 export default function Login() {
 
-    const { user, username } = useContext(UserContext);
+    const { user, username, setPomoSeconds, setBreakSeconds } = useContext(UserContext);
+    const { refreshTimer } = useContext(TimerContext);
     const { colorScheme } = useMantineColorScheme();
 
+    const [weekBtnVariant, setWeekBtnVariant] = useState("filled");
+    const [monthBtnVariant, setMonthButtonVariant] = useState("outline");
+
+    //graph state
     const [graphAmount, setGraphAmount] = useState(7);
+    const [graphIsLoading, setGraphIsLoading] = useState(false);
     const [graphData, setGraphData] = useState({
         labels: [],
         datasets: [{
@@ -22,10 +30,13 @@ export default function Login() {
             backgroundColor: ["#12b886"], 
         }],
     });
-    const [graphIsLoading, setGraphIsLoading] = useState(false);
 
-    const [weekBtnVariant, setWeekBtnVariant] = useState("filled");
-    const [monthBtnVariant, setMonthButtonVariant] = useState("outline");
+    //sign in and account creation state
+    const [modalOpened, {open, close}] = useDisclosure(false);
+    const [createEmail, setCreateEmail] = useState('');
+    const [createPassword, setCreatePassword] = useState('');
+    const [signInEmail, setSignInEmail] = useState('');
+    const [signInPassword, setSignInPassword] = useState('');
 
 
     const signInWithGoogle = async () => {
@@ -53,7 +64,6 @@ export default function Login() {
 
             retrieveWeekData();
         }
-
     }
 
     //populate graph with user's data
@@ -82,6 +92,7 @@ export default function Login() {
         setGraphIsLoading(false);
     }
 
+    //retrieve new set of data on graph range change
     useEffect(() => {
         if(user) {
             retrieveWeekData();
@@ -91,23 +102,65 @@ export default function Login() {
 
     return (
         <>
+        <Modal opened={modalOpened} onClose={close} title="Create an account">
+            <TextInput 
+                label="Email" 
+                value={createEmail} 
+                onChange={(event) => setCreateEmail(event.currentTarget.value)} 
+            />
+            <TextInput 
+                label="Password"
+                value={createPassword}
+                onChange={(event) => setCreatePassword(event.currentTarget.value)}
+            />
+            
+            <Button onClick={() => createEPAccount(createEmail, createPassword)}>Create Account</Button>
+        </Modal>
         <Center>
             {user ? 
                 username ? 
                         <Affix position={{ bottom: rem(20), right: rem('46.5%') }}>
-                            <Button color="gray" onClick={() => auth.signOut()}>Sign Out</Button>
+                            <Button color="gray" onClick={() => {
+                                auth.signOut();
+                                setPomoSeconds(3000);
+                                setBreakSeconds(600);
+                            }}
+                            >Sign Out</Button>
                         </Affix>
                         : 
                         <UsernameForm />
                     :
                     <>
                     <Stack align="center">
+                        <Card>
+                            <TextInput 
+                                label="Email"
+                                value={signInEmail}
+                                onChange={(event) => setSignInEmail(event.currentTarget.value)}
+                            />
+                            <TextInput 
+                                label="Password"
+                                value={signInPassword}
+                                onChange={(event) => setSignInPassword(event.currentTarget.value)}
+                            />
+                            <Button 
+                                onClick={() => signInWithEP(signInEmail, signInPassword)}
+                                color="teal"
+                                variant="filled"
+                            >Sign In</Button>
+                            <Button 
+                                onClick={open}
+                                color="teal"
+                                variant="filled"
+                            >Create Account</Button>
+                        </Card>
+                        <Divider my="md" label="or" labelPosition="center" />
                         <Button 
                             variant="filled" 
                             color="teal" 
                             onClick={signInWithGoogle}
                             leftIcon={<BrandGoogle size={20} strokeWidth={2.5} color={"white"}/>}
-                        >Sign In</Button>
+                        >Sign In with Google</Button>
                         <p>log in to record your sessions and see stats</p>
                     </Stack>
                     </>
