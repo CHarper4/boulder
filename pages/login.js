@@ -5,9 +5,9 @@ import { UsernameForm } from "@/components/username_form";
 import { createDailyDoc, signInWithEP } from "@/lib/hooks";
 
 import { useContext, useState, useEffect } from "react";
-import { Center, Button, Affix, Stack, LoadingOverlay, Box, Card, Text, TextInput, Divider, rem, useMantineColorScheme } from "@mantine/core";
+import { Center, Button, Affix, Stack, LoadingOverlay, Box, Space, TextInput, PasswordInput, Divider, Paper, Title, Text, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { BrandGoogle, Mail, Lock, Eye, EyeOff } from "tabler-icons-react";
+import { BrandGoogle, Mail, Lock } from "tabler-icons-react";
 import { AccountCreationModal } from "@/components/account_creation_modal";
 
 
@@ -16,9 +16,9 @@ export default function Login() {
     const { user, username } = useContext(UserContext);
 
     return (
-        <Center>
+        <>
             {user ? username ? <><Graph /><SignOutButton /></> : <UsernameForm /> : <SignIn />}
-        </Center>
+        </>
     )
 }
 
@@ -28,8 +28,6 @@ function SignIn() {
 
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPassword, setSignInPassword] = useState('');
-
-    const [passwordType, setPasswordType] = useState("password");
 
     const [modalOpened, {open, close}] = useDisclosure(false);
 
@@ -49,36 +47,50 @@ function SignIn() {
     return (
         <>
         <AccountCreationModal opened={modalOpened} close={close}/>
-        <Stack align="stretch">
-            <Stack spacing="sm">
+
+        <Title align="center">Welcome!</Title>
+        <Space h="sm" />
+        <Text align="center">Sign in or create an account if you don't have one!</Text>
+
+        <Space h="xl" />
+
+        <Center>
+        <Paper withBorder shadow="md" p="lg" radius="md" w={rem(650)}>
+        <Stack align="center">
+            <Stack spacing="sm" align="center">
                 <TextInput 
                     label="Email"
                     value={signInEmail}
                     onChange={(event) => setSignInEmail(event.currentTarget.value)}
                     icon={<Mail size={20}/>}
+                    w={rem(400)}
                 />
-                <TextInput 
+                <PasswordInput 
                     label="Password"
-                    type={passwordType}
                     value={signInPassword}
                     onChange={(event) => setSignInPassword(event.currentTarget.value)}
                     icon={<Lock size={20}/>}
-                    rightSection={ passwordType == "password" ? <Eye size={20} onClick={() => setPasswordType("text")}/> : <EyeOff size={20} onClick={() => setPasswordType("password")}/>}
+                    w={rem(400)}
                 />
+                <Space h="xs" />
                 <Button 
                     onClick={() => signInWithEP(signInEmail, signInPassword)}
                     color="teal"
                     variant="filled"
+                    w={rem(200)}
                 >Sign In</Button>
                 <Button 
                     onClick={open}
                     color="teal"
                     variant="subtle"
                     size="xs"
+                    w={rem(200)}
                 >Create Account</Button>
             </Stack>
-            <Divider my="md" label="or" labelPosition="center" />
-            <Stack align="center">
+
+            <Divider my="md" label="or" labelPosition="center" w={rem(600)}/>
+
+            <Stack w={rem(200)}>
                 <Button 
                     variant="filled" 
                     color="teal" 
@@ -87,6 +99,8 @@ function SignIn() {
                 >Sign In with Google</Button>
             </Stack>
         </Stack>
+        </Paper>
+        </Center>
         </>
     )
 }
@@ -133,12 +147,12 @@ function Graph() {
     const retrieveWeekData = async () => {
         setGraphIsLoading(true);
 
-        let weekData = await getSessionData(graphAmount);
+        let graphData = await getSessionData(graphAmount);
 
         let dateLabels = [];
         let dateValues = [];
 
-        for(const [key, value] of Object.entries(weekData)) {
+        for(const [key, value] of Object.entries(graphData)) {
             let splitDate = key.split('-');
             dateLabels.push(splitDate[0] + " / " + splitDate[1]);
             dateValues.push(value);

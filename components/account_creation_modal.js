@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Modal, TextInput, Button } from "@mantine/core";
+import { Modal, TextInput, Flex, PasswordInput, Button, Space } from "@mantine/core";
 import { createEPAccount } from "@/lib/hooks";
-import { Mail, Lock, Eye, EyeOff } from "tabler-icons-react";
+import { Mail, Lock } from "tabler-icons-react";
 
 export function AccountCreationModal({ opened, close }) {
 
@@ -11,8 +11,6 @@ export function AccountCreationModal({ opened, close }) {
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [isValidPassword, setIsValidPassword] = useState(false);
 
-    const [passwordType, setPasswordType] = useState("password");
-    
     //input validation
     const checkEmail = (email) => {
         const regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -51,21 +49,23 @@ export function AccountCreationModal({ opened, close }) {
                 onChange={(event) => setCreateEmail(event.currentTarget.value)}
                 icon={<Mail size={20}/>}
             />
-            <TextInput 
+            <Space h="xs" />
+            <PasswordInput 
                 label="Password"
-                type={passwordType}
                 value={createPassword}
                 onChange={(event) => setCreatePassword(event.currentTarget.value)}
                 icon={<Lock size={20} />}
-                rightSection={ passwordType == "password" ? <Eye size={20} onClick={() => setPasswordType("text")}/> : <EyeOff size={20} onClick={() => setPasswordType("password")}/>}
             />
-            
-            <Button 
-                disabled={!(isValidEmail && isValidPassword)}
-                onClick={() => createEPAccount(createEmail, createPassword)}
-                color="teal"
-            >Create Account</Button>
+            <Space h="xl"/>
+            <Flex justify="center"> 
+                <Button 
+                    disabled={!(isValidEmail && isValidPassword)}
+                    onClick={() => createEPAccount(createEmail, createPassword)}
+                    color="teal"
+                >Create Account</Button>
+            </Flex>
         </Modal>
         </>
     )
 }
+

@@ -3,15 +3,16 @@ import { UserContext } from "@/lib/context";
 import { useContext, useState } from 'react';
 import { firestore } from "@/lib/firebase";
 
-import { NumberInput, Button, Flex, Box } from "@mantine/core";
+import { NumberInput, Button, Stack, Switch, Space } from "@mantine/core";
 
 
 export default function Settings() {
 
-    const { user, username, pomoSeconds, setPomoSeconds, breakSeconds, setBreakSeconds } = useContext(UserContext);
+    const { user, username, pomoSeconds, setPomoSeconds, breakSeconds, setBreakSeconds, alert, setAlert } = useContext(UserContext);
 
     const [pomoMins, setPomoMins] = useState(pomoSeconds/60);
     const [breakMins, setBreakMins] = useState(breakSeconds/60); 
+    const [alertChecked, setAlertChecked] = useState(alert);
     const [dirty, setDirty] = useState(false);
 
     const onSubmit = async () => {
@@ -21,43 +22,25 @@ export default function Settings() {
         if(user) {
             //update authenticated user's settings in firestore
             const res = await firestore.doc(`users/${user.uid}`)
-                .update({pomoSeconds: pomoMins*60, breakSeconds: breakMins*60});
+                .update({pomoSeconds: pomoMins*60, breakSeconds: breakMins*60, alert: alertChecked});
         } else {
             //set context to temporary user's settings
             setPomoSeconds(pomoMins*60);
             setBreakSeconds(breakMins*60);
+            setAlert(alertChecked);
         }
     }
 
     return (
         <>
-            <Flex
-                justify="center"
-                align="center"
-                direction="column"
-            >
-                <Box w={200}
-                    sx={() => ({
-                        padding: "5px"
-                    })}
-                >
-                    <NumberInput label="Study Session Length" onChange={(val) => {setPomoMins(val); setDirty(true);}} defaultValue={pomoMins} step={5} min={0}/>
-                </Box>    
-                <Box w={200}
-                    sx={() => ({
-                        padding: "5px"
-                    })}
-                >
-                    <NumberInput label="Break Length" onChange={(val) => {setBreakMins(val); setDirty(true);}} defaultValue={breakMins} step={1} min={0}/>
-                </Box>
-                <Box w={150} 
-                    sx={() => ({
-                        padding: "10px"
-                    })}
-                >
-                    <Button onClick={() => onSubmit()} variant="filled" color="teal" disabled={!dirty}>Save Changes</Button>
-                </Box>
-            </Flex>
+            <Stack justify="center" align="center">
+                <NumberInput label="Pomodoro Length" onChange={(val) => {setPomoMins(val); setDirty(true);}} defaultValue={pomoMins} step={5} min={1} stepHoldDelay={400} stepHoldInterval={100}/>
+                <NumberInput label="Break Length" onChange={(val) => {setBreakMins(val); setDirty(true);}} defaultValue={breakMins} step={1} min={1} stepHoldDelay={400} stepHoldInterval={100}/>
+                <Space h="15px" />
+                <Switch label="Play alert when timer finishes" color="teal" checked={alertChecked} onChange={(event) => {setAlertChecked(event.currentTarget.checked); setDirty(true)}} />
+                <Space h="15px" />
+                <Button onClick={() => onSubmit()} variant="filled" color="teal" disabled={!dirty}>Save Changes</Button>
+            </Stack>
         </>
     );
 }
