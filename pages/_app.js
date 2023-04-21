@@ -12,7 +12,7 @@ import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 
 export default function App({ Component, pageProps }) {
 
-  const notif = new Audio('notif.mp3');
+  const [notif] = useState(typeof Audio != "undefined" && new Audio('notif.mp3'));
 
   //load user data
   const userData = useUserData();
