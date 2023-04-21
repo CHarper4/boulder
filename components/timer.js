@@ -14,7 +14,7 @@ export default function Timer() {
         <>
         <Stack justify="center" align="center">
             <Flex gap="xs" justify="center" align="center">
-                <Title w={rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
+                <Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
             </Flex>
             {isRunning ?
                 <Button w={rem(200)} variant="subtle" color="teal" onClick={() => pause()}>{<PlayerPause />}</Button>

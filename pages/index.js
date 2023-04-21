@@ -22,8 +22,8 @@ export default function Home() {
             <Button variant="light" color="teal" w={rem(120)} onClick={() => {setDuration(breakSeconds); setInPomoSession(false)}}>Break</Button>
           </Button.Group>
 
-          <Flex gap="xs" justify="center" align="center">
-              <Title w={rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
+          <Flex justify="center" align="center">
+              <Title w={hours ? rem(750) : rem(580)} pl="45px" size="10rem" weight={500} p={rem(25)}>{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
           </Flex>
 
           <Button
@@ -35,7 +35,6 @@ export default function Home() {
           >
             Start
           </Button>
-
         </Stack>
       }
     </>
