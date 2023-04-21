@@ -3,17 +3,3 @@
     width: 100%;
     padding: 10px;
 }
-
-ul.nav-ul {
-    list-style-type: none;
-    position: relative;
-    right: 100px;
-}
-
-li {
-    float: right;
-    margin: 5px;
-}
-
-
-

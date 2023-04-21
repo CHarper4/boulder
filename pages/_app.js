@@ -7,9 +7,12 @@ import { TimerContext, UserContext } from "@/lib/context";
 import { useUserData } from "@/lib/hooks";
 import { auth, incrementCompleted } from "@/lib/firebase";
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
+//import { useColorScheme } from "@mantine/hooks";
 
 
 export default function App({ Component, pageProps }) {
+
+  const [notif] = useState(typeof Audio != "undefined" && new Audio('notif.mp3'));
 
   //load user data
   const userData = useUserData();
@@ -20,7 +23,7 @@ export default function App({ Component, pageProps }) {
   }, []);
   
 
-  //timer context---------------------------------------
+  //TIMER CONTEXT
   const [inPomoSession, setInPomoSession] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -40,6 +43,11 @@ export default function App({ Component, pageProps }) {
   } = useTimer({ expiryTimestamp, autoStart: false, onExpire: () => onExpire() });
   
   const onExpire = () => {
+
+    if(userData.alert) {
+      notif.play();
+    }
+
     //increment completed stat for finished pomo sessions
     if(inPomoSession && userData.user) {
       incrementCompleted();
@@ -61,7 +69,7 @@ export default function App({ Component, pageProps }) {
     refreshTimer();
   }, [duration]);
 
-  //timer context data and functions
+  //timer context object
   const timerData = {
     seconds, 
     minutes, 
@@ -81,7 +89,8 @@ export default function App({ Component, pageProps }) {
     refreshTimer,
   }
 
-  //color scheme context---------------------------------------
+  //COLOR SCHEME CONTEXT
+  //const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme((colorScheme === 'dark' ? 'light' : 'dark'));
 
