@@ -1,42 +1,37 @@
 import { useState, useEffect } from "react";
-import { Modal, TextInput, Flex, PasswordInput, Button, Space } from "@mantine/core";
+import { Modal, TextInput, Flex, PasswordInput, Button, Space, List, Text, Stack } from "@mantine/core";
+import { Mail, Lock, Check, X } from "tabler-icons-react";
+
 import { createEPAccount } from "@/lib/hooks";
-import { Mail, Lock } from "tabler-icons-react";
 
 export function AccountCreationModal({ opened, close }) {
 
     const [createEmail, setCreateEmail] = useState('');
     const [createPassword, setCreatePassword] = useState('');
 
-    const [isValidEmail, setIsValidEmail] = useState(false);
-    const [isValidPassword, setIsValidPassword] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validPassword, setValidPassword] = useState(false);
 
-    //input validation
-    const checkEmail = (email) => {
-        const regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-        if(!regex.test(email)) {
-            setIsValidEmail(false);
-        } else {
-            setIsValidEmail(true);
-        }
-    }
+    const [requirements, setRequirements] = useState({lower: false, upper: false, digit: false, special: false, length: false});
+    
 
-    const checkPassword = (password) => {
-        //const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?\/~_+-=|\]).{6,32}$/;    //a digit, lowercase and uppercase letter, special character, 6-32 length 
-        if(password.length < 6 || password.length > 32) {
-            setIsValidPassword(false);
-        } else {
-            setIsValidPassword(true);
-        }
-    }
-
+    //validate email on change
     useEffect(() => {
-        checkEmail(createEmail);
+        const regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        setValidEmail(regex.test(createEmail));
     }, [createEmail])
 
     
+    //validate password on change
     useEffect(() => {
-        checkPassword(createPassword);
+        let lower = /[a-z]/.test(createPassword);
+        let upper = /[A-Z]/.test(createPassword); 
+        let digit = /\d/.test(createPassword);
+        let special = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(createPassword);
+        let length = createPassword.length >= 6 && createPassword.length <= 32;
+
+        setValidPassword(digit && lower && upper && special && length);
+        setRequirements({lower, upper, digit, special, length});
     }, [createPassword]);
 
 
@@ -45,7 +40,7 @@ export function AccountCreationModal({ opened, close }) {
         <Modal opened={opened} onClose={close} title="Create an account">
             <TextInput 
                 label="Email" 
-                value={createEmail} 
+                value={createEmail}
                 onChange={(event) => setCreateEmail(event.currentTarget.value)}
                 icon={<Mail size={20}/>}
             />
@@ -59,11 +54,22 @@ export function AccountCreationModal({ opened, close }) {
             <Space h="xl"/>
             <Flex justify="center"> 
                 <Button 
-                    disabled={!(isValidEmail && isValidPassword)}
+                    disabled={!(validEmail && validPassword)}
                     onClick={() => createEPAccount(createEmail, createPassword)}
                     color="teal"
                 >Create Account</Button>
             </Flex>
+            <Space h="xl"></Space>
+            <Stack align="center">
+                <Text>Password Requirements</Text>
+                <List icon={<X color="red" ></X>}>
+                    <List.Item icon={requirements.lower && <Check color="green"></Check>}>lowercase letter</List.Item>
+                    <List.Item icon={requirements.upper && <Check color="green"></Check>}>uppercase letter</List.Item>
+                    <List.Item icon={requirements.digit && <Check color="green"></Check>}>digit</List.Item>
+                    <List.Item icon={requirements.special && <Check color="green"></Check>}>special character</List.Item>
+                    <List.Item icon={requirements.length && <Check color="green"></Check>}>6-32 characters</List.Item>
+                </List>
+            </Stack>
         </Modal>
         </>
     )
