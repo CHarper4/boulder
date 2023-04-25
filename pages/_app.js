@@ -7,7 +7,7 @@ import { TimerContext, UserContext } from "@/lib/context";
 import { useUserData } from "@/lib/hooks";
 import { auth, incrementCompleted } from "@/lib/firebase";
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
-//import { useColorScheme } from "@mantine/hooks";
+import { useColorScheme } from "@mantine/hooks";
 
 
 export default function App({ Component, pageProps }) {
@@ -90,10 +90,13 @@ export default function App({ Component, pageProps }) {
   }
 
   //COLOR SCHEME CONTEXT
-  //const preferredColorScheme = useColorScheme();
+  const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme((colorScheme === 'dark' ? 'light' : 'dark'));
 
+  //WORKAROUND: initializing colorScheme as the preferred scheme does not work
+  if((colorScheme == 'dark' || colorScheme == 'light') && colorScheme != preferredColorScheme) toggleColorScheme();  
+  
   
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
