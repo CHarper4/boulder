@@ -3,6 +3,7 @@ import { useTimer } from "react-timer-hook";
 import { useState, useEffect } from "react";
 
 import Navbar from '@/components/navbar';
+import Layout from "@/components/layout";
 import { TimerContext, UserContext } from "@/lib/context";
 import { useUserData } from "@/lib/hooks";
 import { auth, incrementCompleted } from "@/lib/firebase";
@@ -103,6 +104,7 @@ export default function App({ Component, pageProps }) {
     <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
     <TimerContext.Provider value={timerData}>
     <UserContext.Provider value={userData}>
+      <Layout />
       <Navbar />
       <Component {...pageProps} />
     </UserContext.Provider>

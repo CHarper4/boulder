@@ -14,7 +14,7 @@ export default function Timer() {
         <Stack justify="center" align="center">
 
             {/*timer*/}
-            <Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
+            <Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
 
             {/*play and pause buttons*/}
             {isRunning ?

@@ -3,6 +3,7 @@ import { TimerContext, UserContext } from "@/lib/context";
 
 import { useContext } from 'react'
 import { Button, Stack, Title, rem, Divider } from "@mantine/core";
+import Head from "next/head";
 
 
 export default function Home() {
@@ -23,7 +24,7 @@ export default function Home() {
           </Button.Group>
 
           {/*timer preview*/}
-          <Title w={hours ? rem(750) : rem(580)} pl="45px" size="10rem" weight={500} p={rem(25)}>{hours ? `${hours} : ` : null} {minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
+          <Title w={hours ? rem(750) : rem(580)} pl="45px" size="10rem" weight={500} p={rem(25)}>{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
 
           {/*start button*/}
           <Button
