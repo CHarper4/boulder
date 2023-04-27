@@ -1,7 +1,7 @@
  import { TimerContext } from '@/lib/context';
 
 import { useContext } from 'react';
-import { Button, Popover, Text, Title, Stack, Space, rem } from '@mantine/core';
+import { Button, Popover, Text, Title, Stack, Space, Grid, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { PlayerPause, PlayerPlay } from 'tabler-icons-react';
 
@@ -9,12 +9,23 @@ export default function Timer() {
 
     const { seconds, minutes, hours, isRunning, pause, resume, setInProgress, refreshTimer } = useContext(TimerContext);
     const [opened, { close, open }] = useDisclosure(false);
+
     return (
         <>
         <Stack justify="center" align="center">
+            
+            {/*spacing to match preview timer*/}
+            <Space h="xs" />
+            <Space h="xs" />
 
             {/*timer*/}
-            <Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>
+            {/*<Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>*/}
+            <Grid w="50%" justify='center' mb="25px">
+              <Grid.Col span="content" hidden={!hours}><Title size="8rem">{hours}:</Title></Grid.Col>
+              <Grid.Col span="content"><Title size="8rem">{hours && minutes<10 ? 0 : null}{minutes}</Title></Grid.Col>
+              <Grid.Col span="content"><Title size="8rem">:</Title></Grid.Col>
+              <Grid.Col span="content" ><Title size="8rem">{seconds<10 ? 0 : null}{seconds}</Title></Grid.Col>
+            </Grid>
 
             {/*play and pause buttons*/}
             {isRunning ?
@@ -22,6 +33,7 @@ export default function Timer() {
                 :
                 <Button w={rem(200)} variant="filled" color="teal" onClick={() => resume()}>{<PlayerPlay />}</Button>
             }
+
             <Space h="md" />
 
             {/*reset button*/}
