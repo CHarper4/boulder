@@ -13,8 +13,6 @@ import { useColorScheme } from "@mantine/hooks";
 
 export default function App({ Component, pageProps }) {
 
-  const [notif] = useState(typeof Audio != "undefined" && new Audio('notif.mp3'));
-
   //load user data
   const userData = useUserData();
 
@@ -22,8 +20,8 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     return (() => auth.signOut());
   }, []);
-  
 
+  
   //TIMER CONTEXT
   const [inPomoSession, setInPomoSession] = useState(false);
   const [inProgress, setInProgress] = useState(false);
@@ -45,7 +43,8 @@ export default function App({ Component, pageProps }) {
   
   const onExpire = () => {
 
-    if(userData.alert) {
+    if(userData.alert != "None") {
+      let notif = typeof Audio != "undefined" && new Audio(userData.alert + ".mp3");
       notif.play();
     }
 
