@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ActionIcon, Button, Group, Avatar, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Button, Group, Avatar, Title, Affix, useMantineColorScheme } from '@mantine/core';
 import { Moon, Settings, Sun, Login } from 'tabler-icons-react';
 import { useContext } from 'react'
 
@@ -14,13 +14,14 @@ export default function Navbar() {
 
     return (
         <nav className='navbar'>
+            <Affix position={{ top: "5px", left: "47.8%" }}><Title size="1rem" color="#92f2d7">Boulder</Title></Affix>
             <Group position="apart" >
                 <ActionIcon variant="subtle" onClick={() => toggleColorScheme()}>
                     {isDark ? <Sun size="2rem"></Sun> : <Moon size="2rem" ></Moon>}
                 </ActionIcon>
                 <Group spacing="xs">
                     <Link href="/">
-                        <Button variant="subtle" color='teal'>Timer</Button>
+                        <Button variant="subtle" color="teal">Timer</Button>
                     </Link>
                     <Link href="/settings">
                         <ActionIcon variant="subtle"><Settings size="2rem"></Settings></ActionIcon>
