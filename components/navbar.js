@@ -14,11 +14,8 @@ export default function Navbar() {
 
     return (
         <nav className='navbar'>
-            <Affix position={{ top: "5px", left: "47.8%" }}><Title size="1rem" color="#92f2d7">Boulder</Title></Affix>
             <Group position="apart" >
-                <ActionIcon variant="subtle" onClick={() => toggleColorScheme()}>
-                    {isDark ? <Sun size="2rem"></Sun> : <Moon size="2rem" ></Moon>}
-                </ActionIcon>
+                <Link href="/" style={{ textDecoration: "none"}}><Title size="1rem" ml="10px" color={colorScheme == 'dark' ? "#92f2d7" : "#57bb7d"}>Boulder</Title></Link>
                 <Group spacing="xs">
                     <Link href="/">
                         <Button variant="subtle" color="teal">Timer</Button>
@@ -26,6 +23,9 @@ export default function Navbar() {
                     <Link href="/settings">
                         <ActionIcon variant="subtle"><Settings size="2rem"></Settings></ActionIcon>
                     </Link>
+                    <ActionIcon variant="subtle" onClick={() => toggleColorScheme()} ml="10px">
+                        {isDark ? <Sun size="2rem"></Sun> : <Moon size="2rem" ></Moon>}
+                    </ActionIcon>
                     <Link href="/login">
                         {user ? 
                         <Avatar 

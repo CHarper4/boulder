@@ -10,7 +10,7 @@ export default function Layout() {
         <>
         <Head>
             <link rel="icon" href="/images/favicon.ico" />
-            <title>{duration ? `${hours ? hours + ':' : ''}${hours && minutes < 10 ? 0 : ''}${minutes}:${seconds < 10 ? 0 : ''}${seconds} - ${inPomoSession ? 'pomodoro' : 'break'}` : 'Boulder - Pomodoro Timer'}</title>
+            <title>Boulder - {duration ? `${hours ? hours + ':' : ''}${hours && minutes < 10 ? 0 : ''}${minutes}:${seconds < 10 ? 0 : ''}${seconds} - ${inPomoSession ? 'pomodoro' : 'break'}` : 'Pomodoro Timer'}</title>
         </Head>
         </>
     )

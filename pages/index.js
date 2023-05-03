@@ -1,7 +1,7 @@
 import Timer from "@/components/timer"
 import { TimerContext, UserContext } from "@/lib/context";
 
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Button, Stack, Title, rem, Divider, Grid } from "@mantine/core";
 
 
@@ -9,6 +9,8 @@ export default function Home() {
 
   const { pomoSeconds, breakSeconds } = useContext(UserContext);
   const { seconds, minutes, hours, duration, start, inProgress, setInProgress, setInPomoSession, setDuration } = useContext(TimerContext);
+
+
   return (
     <>
       {inProgress ?
@@ -23,7 +25,6 @@ export default function Home() {
           </Button.Group>
 
           {/*timer preview*/}
-          {/*<Title w={hours ? rem(750) : rem(580)} pl="45px" size="10rem" weight={500} p={rem(25)}>{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>*/}
           <Grid w="50%" justify='center' mb="25px">
               <Grid.Col span="content" hidden={!hours}><Title size="8rem">{hours}:</Title></Grid.Col>
               <Grid.Col span="content"><Title size="8rem">{hours && minutes<10 ? 0 : null}{minutes}</Title></Grid.Col>

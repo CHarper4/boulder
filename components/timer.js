@@ -1,6 +1,6 @@
  import { TimerContext } from '@/lib/context';
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Button, Popover, Text, Title, Stack, Space, Grid, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { PlayerPause, PlayerPlay } from 'tabler-icons-react';
@@ -19,7 +19,6 @@ export default function Timer() {
             <Space h="xs" />
 
             {/*timer*/}
-            {/*<Title w={hours ? rem(750) : rem(550)} size="10rem" weight={500} p={rem(25)} >{hours ? `${hours} : ` : null} {hours && minutes<10 ? 0 : null}{minutes} : {seconds<10 ? 0 : null}{seconds}</Title>*/}
             <Grid w="50%" justify='center' mb="25px">
               <Grid.Col span="content" hidden={!hours}><Title size="8rem">{hours}:</Title></Grid.Col>
               <Grid.Col span="content"><Title size="8rem">{hours && minutes<10 ? 0 : null}{minutes}</Title></Grid.Col>
